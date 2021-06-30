@@ -10,6 +10,7 @@ delim = input("input csv delimiter: ")
 first_line_header = input("first line header? [y/n]: ")
 table_name = input("sql table name: ")
 col_names = {}
+encoding = input("file encoding (ex. utf8): ")
 
 while True:
     col_name = input("input column name (empty = end): ")
@@ -24,7 +25,7 @@ while True:
 
 print_or_save = input("print or save result? [p/s]: ")
 
-print("\n\nProccessing...\n\n")
+print("\nßProccessing...\n")
 
 table_val = "("
 for col in col_names:
@@ -32,7 +33,7 @@ for col in col_names:
 table_val = table_val[:-2]
 table_val += ")"
 
-file = open(file_path, "r")
+file = open(file_path, "r", encoding=encoding)
 writer = None
 if print_or_save == "s":
     writer = open("output_file.txt", "w")
@@ -46,7 +47,7 @@ for fline in file:
     value = "("
     for col in col_names:
         index = int(col_names[col])
-        value += "'" + csv[index].rstrip() + "', "
+        value += "'" + remove_quotes(csv[index].rstrip()) + "', "
     value = value[:-2]
     value += ")"
     text = "INSERT INTO `"+table_name+"` " + table_val + " VALUES " + value + ";"
